@@ -8,10 +8,12 @@
         <link rel="stylesheet" href="{% static 'css/bord.css' %}">
     </head>
     <body>
+    {% if user.is_authenticated %}
         <div>
+            <a href="{% url 'post_new' %}"> Create new post</a>
             <h1><a href="">Advert Bord</a></h1>
         </div>
-
+    {% endif %}
 {% block content %}
 {% endblock %}
     </body>
