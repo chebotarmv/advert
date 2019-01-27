@@ -1,5 +1,5 @@
 from django.utils import timezone
-from .models import Post
+from .models import Post, PostViews
 from .forms import PostForm
 from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect
@@ -12,7 +12,14 @@ def post_list(request):
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
-    return render(request, 'bord/post_detail.html', {'post': post})
+    if not PostViews.objects.filter(post=post, session=request.session.session_key):
+        view = PostViews(post=post,
+                         ip=request.META['REMOTE_ADDR'],
+                         created=timezone.now(),
+                         session=request.session.session_key)
+        view.save()
+    postview = PostViews.objects.filter(post=post).count()
+    return render(request, 'bord/post_detail.html', context={'post': post, 'postview': postview})
 
 
 def post_new(request):

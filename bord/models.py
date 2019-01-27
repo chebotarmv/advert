@@ -20,3 +20,10 @@ class Post(models.Model):
 
     def __str__(self):
         return f'{self.title} {self.author} {self.city}'
+
+
+class PostViews(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='postviews')
+    ip = models.CharField(max_length=40)
+    session = models.CharField(max_length=40)
+    created = models.DateTimeField(default=timezone.now)
